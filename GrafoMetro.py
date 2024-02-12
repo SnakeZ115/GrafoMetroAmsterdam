@@ -1,8 +1,9 @@
 from collections import deque
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 import networkx as nx
 import matplotlib.pyplot as plt
+from PIL import Image, ImageTk
 
 def bfs_shortest_path(graph, start, goal):
     # Inicializar la cola para el BFS
@@ -178,18 +179,23 @@ def dibujar_metro_amsterdam(start_node, end_node):
 
     # Calcular el camino más corto entre el nodo de inicio y el nodo destino
     shortest_path = bfs_shortest_path(G, start_node, end_node)
+
     # Resaltar el camino más corto en rojo
     edges = [(shortest_path[i], shortest_path[i+1]) for i in range(len(shortest_path)-1)]
     nx.draw_networkx_edges(G, pos, edgelist=edges, edge_color='red', width=2)
+    plt.text(-13, 16, shortest_path)
 
     # Mostrar el dibujo
     plt.show()
 
 def buscar_ruta():
-    estacionInicial = combo_estacion_inicial.get()
-    estacionFinal = combo_estacion_final.get()
+    try:
+        estacionInicial = combo_estacion_inicial.get()
+        estacionFinal = combo_estacion_final.get()
 
-    dibujar_metro_amsterdam(estacionInicial, estacionFinal)
+        dibujar_metro_amsterdam(estacionInicial, estacionFinal)
+    except:
+        messagebox.showerror('ERROR', 'HA OCURRIDO UN ERROR')
 
 def actualizar_precio(event):
     indice = combo_billete.current()  # Obtener el índice del billete seleccionado
@@ -208,6 +214,28 @@ def actualizar_precio(event):
 
         billetePrecio.config(state="readonly")
         precioMxTxt.config(state="readonly")
+
+def mostrar_ayuda():
+
+    ventana = tk.Toplevel(root)
+    ventana.title("Ayuda")
+
+    mensaje = "Esta es una representación del mapa del metro de Ámsterdam.\n" \
+              "Seleccione una estación inicial y una estación final y haga clic en 'Mostrar Ruta' para encontrar la ruta más corta entre ellas. \n" \
+              "Además, seleccione el billete que usará y se verá tanto el precio en Euros como en Pesos Mexicanos \n" \
+              "La estación inicial será representada como un circulo VERDE y la estación final como un circulo ROJO"
+    lblAyuda = tk.Label(ventana, text=mensaje)
+    lblAyuda.pack()
+
+    lblCirculoVerde = tk.Canvas(ventana, width=150, height=30)
+    lblCirculoVerde.pack()
+    lblCirculoVerde.create_oval(5, 5, 25, 25, fill="green")
+    lblCirculoVerde.create_text(40, 15, text="Estación Inicial", anchor=tk.W)
+
+    lblCirculoRojo = tk.Canvas(ventana, width=150, height=30)
+    lblCirculoRojo.pack()
+    lblCirculoRojo.create_oval(5, 5, 25, 25, fill="red")
+    lblCirculoRojo.create_text(40, 15, text="Estación Final", anchor=tk.W)
 
 nombres_estaciones = [
     'Isolatorweg', 'Sloterdijk', 'De Vlugtlaan', 'Jan van Galenstraat',
@@ -247,8 +275,12 @@ billetes = [
 
 # Crear la ventana principal
 root = tk.Tk()
-root.title("Metro de Amsterdam")
-root.geometry("300x300")
+root.title("LMAmsterdam")
+root.geometry("300x400")
+
+#Boton Ayuda
+btn_ayuda = tk.Button(root, text="Ayuda", command=mostrar_ayuda)
+btn_ayuda.pack(side="top", anchor="ne", padx=10, pady=10)
 
 # ComboBox para seleccionar la estación inicial
 labelEstacionInicial = tk.Label(root, text="Estacion Inicial")
@@ -277,7 +309,6 @@ labelEuros = tk.Label(root, text="Precio en Euros")
 labelEuros.pack()
 billetePrecio = tk.Entry(root, state="readonly")
 billetePrecio.pack()
-
 
 labelMX = tk.Label(root, text="Precio en Pesos Mexicanos")
 labelMX.pack()
