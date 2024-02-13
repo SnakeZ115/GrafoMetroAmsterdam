@@ -179,11 +179,14 @@ def dibujar_metro_amsterdam(start_node, end_node):
 
     # Calcular el camino más corto entre el nodo de inicio y el nodo destino
     shortest_path = bfs_shortest_path(G, start_node, end_node)
+    path_with_arrows = " ➔ ".join(shortest_path)
 
     # Resaltar el camino más corto en rojo
     edges = [(shortest_path[i], shortest_path[i+1]) for i in range(len(shortest_path)-1)]
     nx.draw_networkx_edges(G, pos, edgelist=edges, edge_color='red', width=2)
-    plt.text(-13, 16, shortest_path)
+
+    plt.text(-13, 16, "Ruta más corta:")
+    plt.text(-13, 15.5, path_with_arrows)
 
     # Mostrar el dibujo
     plt.show()
@@ -276,48 +279,52 @@ billetes = [
 # Crear la ventana principal
 root = tk.Tk()
 root.title("LMAmsterdam")
-root.geometry("300x400")
+root.geometry("300x600")
+root.config(bg="white")
 
-#Boton Ayuda
-btn_ayuda = tk.Button(root, text="Ayuda", command=mostrar_ayuda)
+logo = tk.PhotoImage(file="LOGO.PNG")
+labelLogo = tk.Label(image=logo, bg="white")
+labelLogo.pack(pady=5)
+
+btn_ayuda = tk.Button(root, text="Ayuda", command=mostrar_ayuda, bg="#53A548", fg="white")
 btn_ayuda.pack(side="top", anchor="ne", padx=10, pady=10)
 
 # ComboBox para seleccionar la estación inicial
-labelEstacionInicial = tk.Label(root, text="Estacion Inicial")
+labelEstacionInicial = tk.Label(root, text="Estacion Inicial", bg="white")
 labelEstacionInicial.pack()
-combo_estacion_inicial = ttk.Combobox(root, values=nombres_estaciones)
+combo_estacion_inicial = ttk.Combobox(root, values=nombres_estaciones, width=25)
 combo_estacion_inicial.set("Seleccionar estación inicial")
 combo_estacion_inicial.bind("<<ComboboxSelected>>", buscar_ruta)
 combo_estacion_inicial.pack(pady=5)
 
 # ComboBox para seleccionar la estación final
-labelEstacionFinal = tk.Label(root, text="Estacion Final")
+labelEstacionFinal = tk.Label(root, text="Estacion Final", bg="white")
 labelEstacionFinal.pack()
-combo_estacion_final = ttk.Combobox(root, values=nombres_estaciones)
+combo_estacion_final = ttk.Combobox(root, values=nombres_estaciones, width=25)
 combo_estacion_final.set("Seleccionar estación final")
 combo_estacion_final.bind("<<ComboboxSelected>>", buscar_ruta)
 combo_estacion_final.pack(pady=5)
 
-labelBillete = tk.Label(root, text="Billete")
+labelBillete = tk.Label(root, text="Billete", bg="white")
 labelBillete.pack()
-combo_billete = ttk.Combobox(root, values=[str(billete) for billete in billetes])
+combo_billete = ttk.Combobox(root, values=[str(billete) for billete in billetes], width=25)
 combo_billete.set("Seleccionar billete")
 combo_billete.pack(pady=5)
 combo_billete.bind("<<ComboboxSelected>>", actualizar_precio)
 
-labelEuros = tk.Label(root, text="Precio en Euros")
+labelEuros = tk.Label(root, text="Precio en Euros", bg="white")
 labelEuros.pack()
 billetePrecio = tk.Entry(root, state="readonly")
 billetePrecio.pack()
 
-labelMX = tk.Label(root, text="Precio en Pesos Mexicanos")
+labelMX = tk.Label(root, text="Precio en Pesos Mexicanos", bg="white")
 labelMX.pack()
 precioMxTxt = tk.Entry(root, state="readonly")
 precioMxTxt.pack()
 
 # Botón para iniciar el dibujo del metro
-btn_dibujar_metro = tk.Button(root, text="Mostrar Ruta", command=buscar_ruta)
-btn_dibujar_metro.pack(pady=10)
+btn_dibujar_metro = tk.Button(root, text="Mostrar Ruta", command=buscar_ruta, bg="#3E92CC", fg="white", width=20, height=2)
+btn_dibujar_metro.pack(pady=30)
 
 # Ejecutar la aplicación
 root.mainloop()
