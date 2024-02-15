@@ -195,7 +195,6 @@ def buscar_ruta():
         estacionInicial = combo_estacion_inicial.get()
         estacionFinal = combo_estacion_final.get()
         dibujar_metro_amsterdam(estacionInicial, estacionFinal)
-        messagebox.showerror('ERROR', 'HA OCURRIDO UN ERROR')
 
 def actualizar_precio(event):
     indice = combo_billete.current()  # Obtener el índice del billete seleccionado
