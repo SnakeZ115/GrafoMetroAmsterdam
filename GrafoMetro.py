@@ -192,12 +192,9 @@ def dibujar_metro_amsterdam(start_node, end_node):
     plt.show()
 
 def buscar_ruta():
-    try:
         estacionInicial = combo_estacion_inicial.get()
         estacionFinal = combo_estacion_final.get()
-
         dibujar_metro_amsterdam(estacionInicial, estacionFinal)
-    except:
         messagebox.showerror('ERROR', 'HA OCURRIDO UN ERROR')
 
 def actualizar_precio(event):
